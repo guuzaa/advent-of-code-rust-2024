@@ -34,7 +34,7 @@ pub fn part_one(input: &str) -> Option<u32> {
 
 pub fn part_two(input: &str) -> Option<u32> {
     let mut left_list = Vec::new();
-    let mut right_list = Vec::new();
+    let mut right_list_counter = HashMap::new();
 
     // Parse input into two lists
     for line in input.lines() {
@@ -44,13 +44,9 @@ pub fn part_two(input: &str) -> Option<u32> {
 
         let mut numbers = line.split_whitespace().map(|n| n.parse::<u32>().unwrap());
         left_list.push(numbers.next().unwrap());
-        right_list.push(numbers.next().unwrap());
-    }
-
-    // Create a counter for right_list using HashMap
-    let mut right_list_counter = HashMap::new();
-    for &num in &right_list {
-        *right_list_counter.entry(num).or_insert(0) += 1;
+        *right_list_counter
+            .entry(numbers.next().unwrap())
+            .or_insert(0) += 1;
     }
 
     // Calculate similarity score
