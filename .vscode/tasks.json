@@ -1,0 +1,91 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "cargo",
+            "command": "test",
+            "args": [
+                "--package",
+                "advent_of_code",
+                "--bin",
+                "${input:bin}",
+                "--",
+                "--exact",
+                "--show-output"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "test",
+            "label": "rust: test"
+        },
+        {
+            "type": "cargo",
+            "command": "solve",
+            "args": [
+                "${input:bin}"
+            ],
+            "group": "build",
+            "label": "rust: solve"
+        },
+        {
+            "type": "cargo",
+            "command": "submit",
+            "args": [
+                "${input:bin}",
+                "--submit",
+                "${input:part}"
+            ],
+            "group": "build",
+            "label": "rust: submit"
+        },
+        {
+            "type": "cargo",
+            "command": "time",
+            "args": [
+                "${input:bin}"
+            ],
+            "group": "test",
+            "label": "rust: time"
+        },
+        {
+            "type": "cargo",
+            "command": "clippy",
+            "args": [
+                "--",
+                "-D",
+                "warnings"
+            ],
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "test",
+            "label": "rust: lint"
+        },
+        {
+            "type": "cargo",
+            "command": "fmt",
+            "problemMatcher": [
+                "$rustc"
+            ],
+            "group": "test",
+            "label": "rust: format"
+        }
+    ],
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "bin",
+            "description": "Bin name"
+        },
+        {
+            "type": "pickString",
+            "id": "part",
+            "description": "Part number",
+            "options": [
+                "1",
+                "2"
+            ]
+        }
+    ]
+}

@@ -32,29 +32,14 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 fn is_valid_order(pages: &[u32], rules: &HashMap<u32, HashSet<u32>>) -> bool {
-    for (i, &page) in pages.iter().enumerate() {
-        // Check if this page has any rules
-        if let Some(must_come_after) = rules.get(&page) {
+    pages.iter().enumerate().all(|(i, &page)| {
+        rules.get(&page).map_or(true, |must_come_after| {
             // For each page that must come after the current page
-            for &must_follow in must_come_after {
-                // If the page that must come after is in this update but appears before
-                if pages[..i].contains(&must_follow) {
-                    return false;
-                }
-            }
-        }
-
-        // Check reverse rules - if this page must come after any other pages
-        for (&before_page, after_pages) in rules {
-            if after_pages.contains(&page) {
-                // If we find this page in a later position, the before_page must appear earlier
-                if !pages[..i].contains(&before_page) && pages.contains(&before_page) {
-                    return false;
-                }
-            }
-        }
-    }
-    true
+            pages[..i]
+                .iter()
+                .all(|&must_follow| !must_come_after.contains(&must_follow))
+        })
+    })
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
@@ -92,31 +77,29 @@ pub fn part_two(input: &str) -> Option<u32> {
 
 fn sort_pages(pages: &mut [u32], rules: &HashMap<u32, HashSet<u32>>) {
     let len = pages.len();
-    for _ in 0..len {
-        for j in 0..len - 1 {
+    let mut swapped;
+
+    for i in 0..len {
+        swapped = false;
+        for j in 0..len - i - 1 {
             let a = pages[j];
             let b = pages[j + 1];
 
             // Check if b must come before a
             let mut should_swap = false;
-
-            // Check direct rule b -> a
             if let Some(after_b) = rules.get(&b) {
                 if after_b.contains(&a) {
                     should_swap = true;
                 }
             }
 
-            // Check if a appears in any "must come after" sets where b is not yet seen
-            for (&before_page, after_pages) in rules {
-                if after_pages.contains(&a) && before_page == b {
-                    should_swap = true;
-                }
-            }
-
             if should_swap {
                 pages.swap(j, j + 1);
+                swapped = true;
             }
+        }
+        if !swapped {
+            break;
         }
     }
 }
