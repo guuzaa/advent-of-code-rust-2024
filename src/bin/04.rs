@@ -3,8 +3,8 @@ advent_of_code::solution!(4);
 pub fn part_one(input: &str) -> Option<u32> {
     let grid: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
-    let rows = grid.len();
-    let cols = grid[0].len();
+    let rows = grid.len() as i32;
+    let cols = grid[0].len() as i32;
     let mut count = 0;
     let directions = [
         (0, 1),   // right
@@ -21,17 +21,15 @@ pub fn part_one(input: &str) -> Option<u32> {
     // Check all possible starting positions
     for row in 0..rows {
         for col in 0..cols {
-            // Define all 8 directions to check
-
             // Check each direction from current position
             for (dx, dy) in directions {
                 if target.chars().enumerate().all(|(i, expected_char)| {
-                    let new_row = row as i32 + dx * i as i32;
-                    let new_col = col as i32 + dy * i as i32;
+                    let new_row = row + dx * i as i32;
+                    let new_col = col + dy * i as i32;
                     new_row >= 0
-                        && new_row < rows as i32
+                        && new_row < rows
                         && new_col >= 0
-                        && new_col < cols as i32
+                        && new_col < cols
                         && grid[new_row as usize][new_col as usize] == expected_char
                 }) {
                     count += 1;
@@ -46,8 +44,8 @@ pub fn part_one(input: &str) -> Option<u32> {
 pub fn part_two(input: &str) -> Option<u32> {
     let grid: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
 
-    let rows = grid.len();
-    let cols = grid[0].len();
+    let rows = grid.len() as i32;
+    let cols = grid[0].len() as i32;
     let mut count = 0;
 
     let forward = "MAS";
@@ -69,15 +67,15 @@ pub fn part_two(input: &str) -> Option<u32> {
         for col in 1..cols - 1 {
             for (first_pattern, second_pattern) in combinations.iter() {
                 if first_pattern.chars().enumerate().all(|(i, expected_char)| {
-                    let new_row = (row as i32 + i as i32 - 1) as usize;
-                    let new_col = (col as i32 + i as i32 - 1) as usize;
+                    let new_row = (row + i as i32 - 1) as usize;
+                    let new_col = (col + i as i32 - 1) as usize;
                     grid[new_row][new_col] == expected_char
                 }) && second_pattern
                     .chars()
                     .enumerate()
                     .all(|(i, expected_char)| {
-                        let new_row = (row as i32 + i as i32 - 1) as usize;
-                        let new_col = (col as i32 - i as i32 + 1) as usize;
+                        let new_row = (row + i as i32 - 1) as usize;
+                        let new_col = (col - i as i32 + 1) as usize;
                         grid[new_row][new_col] == expected_char
                     })
                 {
@@ -104,5 +102,19 @@ mod tests {
     fn test_part_two() {
         let result = part_two(&advent_of_code::template::read_file("examples", DAY));
         assert_eq!(result, Some(9));
+    }
+
+    #[test]
+    #[ignore = "inputs"]
+    fn test_part_one_real() {
+        let result = part_one(&advent_of_code::template::read_file("inputs", DAY));
+        assert_eq!(result, Some(2662));
+    }
+
+    #[test]
+    #[ignore = "inputs"]
+    fn test_part_two_real() {
+        let result = part_two(&advent_of_code::template::read_file("inputs", DAY));
+        assert_eq!(result, Some(2034));
     }
 }
