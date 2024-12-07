@@ -34,7 +34,6 @@ fn add_mul(result: u64, lhs: u64, depth: usize, tokens: &[u64]) -> bool {
     if product == result && depth == tokens.len() - 1 {
         return true;
     }
-
     if add_mul(result, product, depth + 1, tokens) {
         return true;
     }
