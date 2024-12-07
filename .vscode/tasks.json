@@ -17,7 +17,7 @@
                 "$rustc"
             ],
             "group": "test",
-            "label": "rust: test"
+            "label": "aoc: test"
         },
         {
             "type": "cargo",
@@ -26,7 +26,7 @@
                 "${input:bin}"
             ],
             "group": "build",
-            "label": "rust: solve"
+            "label": "aoc: solve"
         },
         {
             "type": "cargo",
@@ -37,7 +37,7 @@
                 "${input:part}"
             ],
             "group": "build",
-            "label": "rust: submit"
+            "label": "aoc: submit"
         },
         {
             "type": "cargo",
@@ -46,7 +46,7 @@
                 "${input:bin}"
             ],
             "group": "test",
-            "label": "rust: time"
+            "label": "aoc: time"
         },
         {
             "type": "cargo",
@@ -60,7 +60,7 @@
                 "$rustc"
             ],
             "group": "test",
-            "label": "rust: lint"
+            "label": "aoc: lint"
         },
         {
             "type": "cargo",
@@ -69,7 +69,7 @@
                 "$rustc"
             ],
             "group": "test",
-            "label": "rust: format"
+            "label": "aoc: format"
         }
     ],
     "inputs": [
