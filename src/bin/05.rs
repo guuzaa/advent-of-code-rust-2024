@@ -76,32 +76,39 @@ pub fn part_two(input: &str) -> Option<u32> {
 }
 
 fn sort_pages(pages: &mut [u32], rules: &HashMap<u32, HashSet<u32>>) {
-    let len = pages.len();
-    let mut swapped;
+    quick_sort(pages, 0, pages.len() as isize - 1, rules);
+}
 
-    for i in 0..len {
-        swapped = false;
-        for j in 0..len - i - 1 {
-            let a = pages[j];
-            let b = pages[j + 1];
+fn quick_sort(pages: &mut [u32], low: isize, high: isize, rules: &HashMap<u32, HashSet<u32>>) {
+    if low < high {
+        let p = partition(pages, low, high, rules);
+        quick_sort(pages, low, p - 1, rules);
+        quick_sort(pages, p + 1, high, rules);
+    }
+}
 
-            // Check if b must come before a
-            let mut should_swap = false;
-            if let Some(after_b) = rules.get(&b) {
-                if after_b.contains(&a) {
-                    should_swap = true;
-                }
-            }
+fn partition(
+    pages: &mut [u32],
+    low: isize,
+    high: isize,
+    rules: &HashMap<u32, HashSet<u32>>,
+) -> isize {
+    let pivot = pages[high as usize];
+    let mut i = low - 1;
 
-            if should_swap {
-                pages.swap(j, j + 1);
-                swapped = true;
-            }
-        }
-        if !swapped {
-            break;
+    for j in low..high {
+        let should_swap = rules.get(&pivot).map_or(false, |after_pivot| {
+            after_pivot.contains(&pages[j as usize])
+        });
+
+        if !should_swap {
+            i += 1;
+            pages.swap(i as usize, j as usize);
         }
     }
+
+    pages.swap((i + 1) as usize, high as usize);
+    i + 1
 }
 
 #[cfg(test)]
