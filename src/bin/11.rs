@@ -19,8 +19,8 @@ fn simulate_blinking(stones: Vec<u64>, num_blinks: u32) -> u64 {
                         .and_modify(|v| *v += count)
                         .or_insert(count);
                 }
-                n if (n.checked_ilog10().unwrap_or(0) + 1) % 2 == 0 => {
-                    let num_digits = n.checked_ilog10().unwrap_or(0) + 1;
+                n if num_digits(n) % 2 == 0 => {
+                    let num_digits = num_digits(n);
                     let (left, right) = n.div_rem_euclid(&10_u64.pow(num_digits / 2));
                     new_cache
                         .entry(left)
@@ -43,6 +43,10 @@ fn simulate_blinking(stones: Vec<u64>, num_blinks: u32) -> u64 {
     }
 
     cache.values().sum::<u64>()
+}
+
+fn num_digits(n: u64) -> u32 {
+    n.checked_ilog10().unwrap_or(0) + 1
 }
 
 pub fn part_one(input: &str) -> Option<u64> {

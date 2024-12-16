@@ -44,9 +44,10 @@ pub fn part_two(input: &str) -> Option<u32> {
 
         let mut numbers = line.split_whitespace().map(|n| n.parse::<u32>().unwrap());
         left_list.push(numbers.next().unwrap());
-        *right_list_counter
+        right_list_counter
             .entry(numbers.next().unwrap())
-            .or_insert(0) += 1;
+            .and_modify(|v| *v += 1)
+            .or_insert(1);
     }
 
     // Calculate similarity score
